@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SkySense — Weather App</title>
+
+    <!-- Lucide icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <!-- Fonts: Inter for UI, Outfit for numbers -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <!-- animated background blobs -->
+    <div class="bg-layer" id="bgLayer">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+    </div>
+
+    <!-- top-right controls -->
+    <div class="top-controls">
+        <button id="themeToggle" class="ctrl-btn" title="Toggle Theme">🌞</button>
+    </div>
+
+    <!-- loading overlay -->
+    <div id="loadingSpinner" class="spinner-wrap" style="display:none;">
+        <div class="spinner-ring"></div>
+    </div>
+
+    <!-- ============================
+         HERO
+    ============================= -->
+    <header class="hero">
+        <div class="logo">
+            <span class="logo-icon" id="heroEmoji">⛅</span>
+            <div>
+                <h1 class="logo-name">SkySense</h1>
+                <p class="logo-sub">Weather · Forecasts · AI Insights</p>
+            </div>
+        </div>
+
+        <div class="search-wrapper">
+            <div class="search-box" id="searchBox">
+                <i data-lucide="map-pin" class="search-pin"></i>
+                <input type="text" id="cityInput" placeholder="Search city…" autocomplete="off" spellcheck="false" />
+                <button id="searchBtn" onclick="getWeather()">
+                    <i data-lucide="search"></i>
+                    <span>Search</span>
+                </button>
+            </div>
+            <p id="errorName" class="error-msg" style="display:none;"></p>
+        </div>
+    </header>
+
+    <!-- ============================
+         MAIN CARDS
+    ============================= -->
+    <main class="main-grid" id="mainGrid" style="display:none;">
+
+        <!-- LEFT: current weather -->
+        <section class="card weather-card" id="weatherCard">
+
+            <!-- city + condition -->
+            <div class="wc-top">
+                <div>
+                    <h2 class="wc-city" id="cityName"></h2>
+                    <p class="wc-date" id="currentDate"></p>
+                </div>
+                <img id="weatherIcon" src="" alt="" class="wc-icon" />
+            </div>
+
+            <!-- big temperature -->
+            <div class="wc-temp-block">
+                <span class="wc-temp" id="temperature"></span>
+                <div class="wc-temp-right">
+                    <p class="wc-desc" id="weatherDesc"></p>
+                    <div class="wc-badges">
+                        <span class="badge" id="feelsLike"></span>
+                        <span class="badge" id="visibilityBadge"></span>
+                        <span class="badge" id="pressureBadge"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4-stat row -->
+            <div class="wc-stats">
+                <div class="stat">
+                    <i data-lucide="sunrise" class="stat-icon sunrise-icon"></i>
+                    <span class="stat-lbl">Sunrise</span>
+                    <span class="stat-val" id="sunrise"></span>
+                </div>
+                <div class="stat">
+                    <i data-lucide="sunset" class="stat-icon sunset-icon"></i>
+                    <span class="stat-lbl">Sunset</span>
+                    <span class="stat-val" id="sunset"></span>
+                </div>
+                <div class="stat">
+                    <i data-lucide="wind" class="stat-icon wind-icon"></i>
+                    <span class="stat-lbl">Wind</span>
+                    <span class="stat-val" id="wind"></span>
+                </div>
+                <div class="stat">
+                    <i data-lucide="droplets" class="stat-icon hum-icon"></i>
+                    <span class="stat-lbl">Humidity</span>
+                    <span class="stat-val" id="humidity"></span>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT: AI suggestions -->
+        <section class="card suggestion-card" id="suggestionCard">
+            <div class="sg-header">
+                <div class="sg-title-row">
+                    <div class="sg-badge">AI</div>
+                    <h3>Smart Suggestions</h3>
+                </div>
+                <p class="sg-sub">Powered by GPT-4o-mini</p>
+            </div>
+
+            <!-- loading state -->
+            <div id="aiLoading" class="ai-loading" style="display:none;">
+                <div class="pulse-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <p>Analysing weather data…</p>
+            </div>
+
+            <ul id="aiSuggestions" class="sg-list"></ul>
+        </section>
+
+    </main>
+
+    <!-- ============================
+         5-DAY FORECAST
+    ============================= -->
+    <section class="forecast-section" id="forecastSection" style="display:none;">
+        <div class="forecast-header">
+            <i data-lucide="calendar-range"></i>
+            <h2>5-Day Forecast</h2>
+        </div>
+        <div id="forecast" class="forecast-track"></div>
+    </section>
+
+    <script src="script.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
